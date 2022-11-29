@@ -9,7 +9,7 @@ const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
 
-//Ajan esitt‰miseen tarvittavat muuttujat 
+//Ajan esitt√§miseen tarvittavat muuttujat 
 int SEK1, SEK2, MIN1, MIN2;
 volatile byte time = 0;
 volatile int P1_RunningTime = 0;
@@ -22,14 +22,15 @@ int P2 = 0;
 int PelaajanVuoro = 0;
 
 //EEEPROM:iin mahtuu vain maksimiarvoltaan 254 kokoinen int muuttuja, joten RunningTime muuttuja tarvitsee jakaa kolmella tallentamiseen
+int val1 = 0;
 int val2 = 0;
 
-//Esitell‰‰n napeissa kaytetyt peliajat
+//Esitell√§√§n napeissa kaytetyt peliajat
 const int kello3min = 180;
 const int kello5min = 300;
 const int kello9min = 540;
 
-//esitellaan pelaajien vuoroa kuvastavat ledit
+//Esitellaan pelaajien vuoroa kuvastavat ledit
 const int P1_Led = 6;
 const int P2_Led = 8;
 
@@ -60,7 +61,7 @@ void setup() {
     P1_RunningTime = P1;
     P2_RunningTime = P2;
 
-    //Asetetaan pinModet
+    //Asetetaan pinModet. Input = Nappi, output vuoroa kuvastavat ledit
     pinMode(P1_Led, OUTPUT);
     pinMode(P2_Led, OUTPUT);
     pinMode(P1_Button, INPUT);
@@ -121,7 +122,7 @@ void loop() {
     }
 
 
-    //Kun ei ole kenenk‰‰n vuoro, ledit ovat off
+    //Kun ei ole kenenk√§√§n vuoro, ledit ovat off
     if (PelaajanVuoro == 0)
 
     {
@@ -151,7 +152,7 @@ void loop() {
 
 
 
-    //PELAAJAN 1 KOLME AIKAVALINTAA
+    //PELAAJAN 1, KOLME AIKAVALINTAA
     if (digitalRead(P1Min3_Button) == HIGH)
     {
         P1_RunningTime = 180;
@@ -171,7 +172,7 @@ void loop() {
 
     }
 
-    //PELAAJAN 2 KOLME AIKAVALINTAA
+    //PELAAJAN 2, KOLME AIKAVALINTAA
     if (digitalRead(P2Min3_Button) == HIGH)
     {
         P2_RunningTime = 180;
@@ -204,7 +205,8 @@ void Timer_int_routine()
 {
 
     lcd.clear();
-
+    
+    //Muutetaan RunningTime muotoon minuutteja ja sekuntteja
     SEK1 = P1_RunningTime % 60;
     MIN1 = (P1_RunningTime - SEK1) / 60;
     SEK2 = P2_RunningTime % 60;
@@ -240,7 +242,7 @@ void Timer_int_routine()
 
     }
 
-    //Vahennetaan joka timerInterrupt syklissa yksi arvo RunningTimesta silta kenen vuoro on
+    //Vahennetaan joka timerInterrupt syklissa yksi arvo RunningTimesta pelaajalta kenen vuoro on
     if (PelaajanVuoro == 1)
     {
         P1_RunningTime--;
